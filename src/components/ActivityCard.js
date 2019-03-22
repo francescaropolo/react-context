@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import Button from './Button';
+import ButtonCart, { ButtonFav } from './Button';
 
 class ActivityCard extends Component {
 
   state = {
     isAdded: false,
+    isFavourite: false
   }
 
   handleClick = (id) => {
@@ -15,10 +16,26 @@ class ActivityCard extends Component {
 
       this.props.addToCart(id);
     }
+  }
 
+  handleFavourite = () => {
+    if(!this.state.isFavourite) {
+      this.setState({
+        isFavourite: true
+      })
+
+      this.props.addToFavourites();
+    } else {
+      this.setState({
+        isFavourite: false
+      })
+
+      this.props.removeToFavourites();
+    }
   }
 
   render() {
+    console.log('activity card', this.props)
     const { title, description, cover_image_url, retail_price, uuid } = this.props.activity;
     return (
       <>
@@ -28,7 +45,10 @@ class ActivityCard extends Component {
         <h2>{title}</h2>
         <p>{description}</p>
         <span>{retail_price.formatted_value}</span>
-        <Button isAdded={this.state.isAdded} addToCart={() => this.handleClick(uuid)}/>
+        <div>
+          <ButtonCart isAdded={this.state.isAdded} addToCart={() => this.handleClick(uuid)}/>
+          <ButtonFav isFavourite={this.state.isFavourite} addToFavourites={this.handleFavourite}/>
+        </div>
       </>
     )
   }

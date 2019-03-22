@@ -5,9 +5,10 @@ import ActivityCard from './ActivityCard';
 class ListActivity extends Component {
 
   renderList = () => {
+    console.log(this.props)
     return this.props.activities.map((activity, index) => (
       <li key={index}>
-        <ActivityCard activity={activity} addToCart={this.props.addToCart}/>
+        <ActivityCard activity={activity} addToCart={this.props.addToCart} addToFavourites={this.props.addToFavourites} removeToFavourites={this.props.removeToFavourites}/>
       </li>
     ))
   }

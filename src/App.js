@@ -3,14 +3,15 @@ import ListActivity from './components/ListActivity';
 import ActivityService from './services/ActivityService';
 import NavBar from './components/NavBar';
 import './App.css';
+import Cart from './components/Cart';
 
 class App extends Component {
   render() {
-    console.log(this.props)
     return (
       <div className="container">
         <ActivityService>
           <NavBar />
+          <Cart />
           <ListActivity/>
         </ActivityService>
       </div>

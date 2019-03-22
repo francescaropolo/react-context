@@ -11,7 +11,12 @@ export const withContext = (Comp) => {
             <Comp
               activities={value.activities}
               addToCart={value.addToCart}
+              removeFromCart={value.removeFromCart}
+              addToFavourites={value.addToFavourites}
+              removeToFavourites={value.removeToFavourites}
+              favourites={value.favourites}
               cart={value.cart}
+              sumCart={value.sumCart}
               {...this.props}
             />
           )}
@@ -25,6 +30,7 @@ class ActivityService extends Component {
   state = {
     activities: [],
     cart: [],
+    sumCart: 0,
     favourites: 0,
   }
 
@@ -35,19 +41,41 @@ class ActivityService extends Component {
   }
 
   addToCart = (id) => {
-    const {activities, cart} = this.state;
+    const {activities, cart, sumCart} = this.state;
     const activityToCart = activities.find(item => item.uuid === id);
+    const newTotal = sumCart + activityToCart.retail_price.value;
     this.setState({
-      cart: [...cart, activityToCart]
+      cart: [...cart, activityToCart],
+      sumCart: newTotal
     })
   }
 
-  addToFavourites = (id) => {
-    const { activities, favourites } = this.state;
-    // const activityToFavourite = activities.find(item => item.uuid === id);
-    // this.setState({
-    //   cart: [...cart, activityToCart]
-    // })
+  removeFromCart = (id) => {
+    const { activities, cart, sumCart } = this.state;
+    const activityFromCart = activities.find(item => item.uuid === id);
+    const indexActivity = cart.indexOf(activityFromCart);
+    const newTotal = sumCart - activityFromCart.retail_price.value;
+    cart.splice(indexActivity, 1);
+    this.setState({
+      cart,
+      sumCart: newTotal
+    })
+  }
+
+  addToFavourites = () => {
+    let {favourites} = this.state;
+    favourites++
+    this.setState({
+      favourites
+    })
+  }
+
+  removeToFavourites = () => {
+    let { favourites } = this.state;
+    favourites--
+    this.setState({
+      favourites
+    })
   }
 
   render() {
@@ -56,7 +84,12 @@ class ActivityService extends Component {
         value={{
           activities: this.state.activities,
           addToCart: this.addToCart,
+          removeFromCart: this.removeFromCart,
           cart: this.state.cart,
+          addToFavourites: this.addToFavourites,
+          removeToFavourites: this.removeToFavourites,
+          favourites: this.state.favourites,
+          sumCart: this.state.sumCart,
         }}>
         {this.props.children}
       </MyContext.Provider>
